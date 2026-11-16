@@ -12,6 +12,9 @@ pub struct SfxPlayer {
 
 impl SfxPlayer {
     pub fn new(volume: f32) -> Result<Self> {
+        if crate::audio::player::no_audio() {
+            anyhow::bail!("audio off");
+        }
         let (stream, handle) = OutputStream::try_default()?;
         Ok(Self {
             _stream: stream,
