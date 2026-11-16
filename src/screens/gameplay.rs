@@ -105,6 +105,10 @@ pub struct GameplayScreen {
     pub offset_ms: i64,
     pub intensity: Vec<f32>,
     pub warp: f32,
+    /// The game plays itself (`cascade play SONG --autoplay`), for previews.
+    pub autoplay: bool,
+    /// The next note autoplay will hit.
+    auto_next: usize,
 }
 
 pub struct MilestoneSplash {
@@ -195,6 +199,8 @@ impl GameplayScreen {
             offset_ms: offset_ms as i64,
             intensity,
             warp: 0.0,
+            autoplay: false,
+            auto_next: 0,
             beatmap,
             audio,
         })
@@ -257,6 +263,9 @@ impl GameplayScreen {
             &self.hit_notes,
         );
 
+        if self.autoplay {
+            self.autoplay_frame(current_ms);
+        }
         self.process_auto_events(current_ms);
         self.emulate_hold_releases(current_ms);
         self.tick_visual_timers();
@@ -350,6 +359,7 @@ impl GameplayScreen {
                     return Some(Action::Navigate(Screen::Results));
                 }
                 self.paused = !self.paused;
+                log::info!("paused {} at {} ms", self.paused, self.game_ms());
                 if self.paused {
                     self.audio.pause();
                 } else {
@@ -529,6 +539,36 @@ impl GameplayScreen {
             match ev {
                 AutoEvent::HoldComplete(i, lane) => self.complete_hold(i, lane),
                 AutoEvent::Miss(i) => self.register_miss(i),
+            }
+        }
+    }
+
+    /// Autoplay: hit every note as it reaches the line, hold holds through,
+    /// and slide to the slide's lane just before the hold ends.
+    fn autoplay_frame(&mut self, now: u64) {
+        while let Some(note) = self.beatmap.notes.get(self.auto_next).cloned() {
+            if note.time_ms > now {
+                break;
+            }
+            self.auto_next += 1;
+            if now.saturating_sub(note.time_ms) > HitJudge::GOOD_MS {
+                continue;
+            }
+            let lane = note.lane as usize;
+            self.hold_pressed_at_ms[lane] = now;
+            self.hold_last_seen_ms[lane] = now;
+            self.handle_key_press(lane);
+        }
+        for lane in 0..5 {
+            let Some(idx) = self.held_notes[lane] else { continue };
+            // a held key, as far as the hold emulation can tell
+            self.hold_last_seen_ms[lane] = now;
+            let note = &self.beatmap.notes[idx];
+            let (slide_to, end) = (note.slide_to, note.time_ms + note.duration_ms);
+            if let Some(to) = slide_to
+                && now + 30 >= end
+            {
+                self.handle_key_press(to as usize);
             }
         }
     }

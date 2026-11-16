@@ -6,6 +6,7 @@ mod achievements;
 mod app;
 mod audio;
 mod beatmap;
+mod bundled;
 mod cli;
 mod config;
 mod game;
@@ -18,7 +19,7 @@ mod stats;
 mod ui;
 
 use std::io;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant};
 
 use anyhow::Result;
@@ -53,8 +54,14 @@ use screens::stats::StatsScreen;
 const TARGET_FPS: u64 = 60;
 const FRAME_DURATION: Duration = Duration::from_micros(1_000_000 / TARGET_FPS);
 
+const SNAPSHOT_EVERY: Duration = Duration::from_millis(500);
+
 fn main() -> Result<()> {
+    // Session log: RUST_LOG=debug cascade 2>cascade.log
+    env_logger::init();
     let args: Vec<String> = std::env::args().collect();
+    log::info!("cascade {} args {:?}", env!("CARGO_PKG_VERSION"), &args[1..]);
+    bundled::seed();
 
     if args.len() >= 2 {
         match args[1].as_str() {
@@ -111,6 +118,7 @@ fn main() -> Result<()> {
                         events: rec.events.clone(),
                         label: rec.run_id.clone(),
                     }),
+                    autoplay: false,
                 }));
             }
             "achievements" => return cli::achievements_list(),
@@ -140,12 +148,14 @@ fn main() -> Result<()> {
                         std::process::exit(1);
                     }
                 };
+                let autoplay = args[3..].iter().any(|a| a == "--autoplay");
                 return run_interactive(Some(StartSong {
                     slug,
                     difficulty,
                     mods,
                     practice,
                     ghost: None,
+                    autoplay,
                 }));
             }
             "help" | "--help" | "-h" => return cli::print_help(),
@@ -162,6 +172,9 @@ struct StartSong {
     mods: game::modifiers::Mods,
     practice: Option<game::practice::PracticeSettings>,
     ghost: Option<ReplayGhost>,
+    /// The game plays the song itself (`--autoplay`), for previews; nothing
+    /// is scored or saved.
+    autoplay: bool,
 }
 
 #[derive(Clone)]
@@ -260,6 +273,7 @@ struct Session {
     last_audio_path: Option<PathBuf>,
     last_song_title: String,
     replay_ghost: Option<ReplayGhost>,
+    autoplay: bool,
 }
 
 impl Session {
@@ -318,6 +332,7 @@ impl Session {
             last_audio_path: None,
             last_song_title: String::new(),
             replay_ghost: None,
+            autoplay: false,
         })
     }
 
@@ -348,9 +363,35 @@ impl Session {
         let Some(gp) = self.gameplay.take() else {
             return;
         };
+        log::info!(
+            "song over: score {} accuracy {:.2} max combo {} judgements {:?} died {} autoplay {}",
+            gp.state.score,
+            gp.state.accuracy(),
+            gp.state.max_combo,
+            gp.state.judgement_counts,
+            gp.state.is_dead(),
+            gp.autoplay
+        );
         // Practice runs don't count — no score, no achievements, no results screen.
         if gp.is_practice() {
             self.results = None;
+            return;
+        }
+        if gp.autoplay {
+            // the game played itself: show the results, keep nothing
+            let breakdown =
+                play_history::breakdown(&gp.replay_events, gp.beatmap.song.duration_ms);
+            let diff_name = gp.beatmap.difficulty.to_string();
+            self.results = Some(ResultsScreen::new(
+                gp.state,
+                self.last_song_title.clone(),
+                diff_name,
+                None,
+                false,
+                Vec::new(),
+                gp.mods,
+                breakdown,
+            ));
             return;
         }
         let (prev_best, is_best) = self.record_score(&gp);
@@ -493,6 +534,17 @@ impl Session {
         if let Some(ghost) = &self.replay_ghost {
             gp.set_ghost(ghost.events.clone(), ghost.label.clone());
         }
+        gp.autoplay = self.autoplay;
+        log::info!(
+            "play {} ({}) {} mods {:?} notes {} practice {} autoplay {}",
+            self.last_song_title,
+            self.last_beatmap_path.as_deref().unwrap_or(Path::new("")).display(),
+            gp.beatmap.difficulty,
+            gp.mods.storage_key(),
+            gp.beatmap.notes.len(),
+            gp.is_practice(),
+            gp.autoplay
+        );
         gp.start();
         self.gameplay = Some(gp);
         Ok(true)
@@ -522,6 +574,7 @@ fn run(
                     session.song_select.practice = p;
                 }
                 session.replay_ghost = start.ghost;
+                session.autoplay = start.autoplay;
                 session.song_select.selected = session
                     .song_select
                     .filtered_indices
@@ -545,11 +598,26 @@ fn run(
         }
     }
 
+    let mut snapshot = Instant::now();
+    // CASCADE_FPS draws fewer frames a second (the game still runs at 60),
+    // for recordings that must stay small
+    let draw_every = std::env::var("CASCADE_FPS")
+        .ok()
+        .and_then(|v| v.parse::<u64>().ok())
+        .map_or(1, |fps| (TARGET_FPS / fps.clamp(1, TARGET_FPS)).max(1));
+    let mut frame = 0u64;
     while session.app.running {
+        frame += 1;
         let frame_start = Instant::now();
+        if snapshot.elapsed() >= SNAPSHOT_EVERY {
+            snapshot = frame_start;
+            log_snapshot(&session);
+        }
         process_input(&mut session, terminal)?;
         update(&mut session, terminal);
-        draw(&mut session, terminal)?;
+        if frame % draw_every == 0 {
+            draw(&mut session, terminal)?;
+        }
 
         while session.app.running {
             let remaining = FRAME_DURATION.saturating_sub(frame_start.elapsed());
@@ -569,9 +637,18 @@ fn process_input(
     let mut event_budget = 16;
     while event_budget > 0 && event::poll(Duration::from_millis(0))? {
         event_budget -= 1;
-        let Event::Key(key) = event::read()? else {
+        let ev = event::read()?;
+        let Event::Key(key) = ev else {
+            log::debug!("event {ev:?}");
             continue;
         };
+        log::debug!(
+            "key {:?} {:?} {:?} on {:?}",
+            key.code,
+            key.kind,
+            key.modifiers,
+            session.app.screen
+        );
         if !matches!(key.kind, KeyEventKind::Press) && session.app.screen != Screen::Gameplay {
             continue;
         }
@@ -704,6 +781,7 @@ fn transition_to(
     terminal: &mut Terminal<CrosstermBackend<io::Stdout>>,
     screen: Screen,
 ) -> Result<()> {
+    log::info!("screen {:?} -> {:?}", session.app.screen, screen);
     if screen != Screen::SongSelect
         && let Some(preview) = &mut session.preview
     {
@@ -771,6 +849,35 @@ fn transition_to(
     Ok(())
 }
 
+/// Twice a second at debug: where the player is and what is going on.
+fn log_snapshot(session: &Session) {
+    match (&session.app.screen, &session.gameplay) {
+        (Screen::Gameplay, Some(gp)) => {
+            let held: Vec<usize> = (0..5).filter(|&l| gp.held_notes[l].is_some()).collect();
+            log::debug!(
+                "snapshot gameplay at {} ms of {} ms, paused {}, score {}, combo {}, accuracy {:.2}, health {:.2}, judgements {:?}, held lanes {:?}",
+                gp.game_ms(),
+                gp.beatmap.song.duration_ms,
+                gp.paused,
+                gp.state.score,
+                gp.state.combo,
+                gp.state.accuracy(),
+                gp.state.health,
+                gp.state.judgement_counts,
+                held
+            );
+        }
+        (screen, _) => log::debug!(
+            "snapshot {:?}: song {} of {}, difficulty {}, search {:?}",
+            screen,
+            session.song_select.selected,
+            session.song_select.songs.len(),
+            session.song_select.difficulty,
+            session.song_select.search_query
+        ),
+    }
+}
+
 fn draw_loading(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Result<()> {
     terminal.draw(|frame| {
         let area = frame.area();
@@ -806,7 +913,13 @@ fn handle_import_input(
             if raw.is_empty() {
                 return Ok(());
             }
-            run_import(session, terminal, PathBuf::from(raw.trim()))?;
+            let raw = raw.trim();
+            // a path typed the way a shell takes it: ~ is the home folder
+            let path = match raw.strip_prefix("~/").zip(dirs::home_dir()) {
+                Some((rest, home)) => home.join(rest),
+                None => PathBuf::from(raw),
+            };
+            run_import(session, terminal, path)?;
         }
         _ => {}
     }

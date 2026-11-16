@@ -116,7 +116,8 @@ pub fn print_help() -> Result<()> {
          --mods hd,fl,sd,po (Hidden/Flashlight/SuddenDeath/PerfectOnly)\n                                  \
          --section MM:SS-MM:SS  practice: loop a section\n                                  \
          --speed 0.25..2.0      practice: slow down / speed up\n                                  \
-         (practice ignores mods and does not save scores)\n  \
+         (practice ignores mods and does not save scores)\n                                  \
+         --autoplay             watch the game play it (nothing is saved)\n  \
          cascade export <slug> [-o FILE.cscd] [--source-url URL]\n                                  \
          Pack metadata + all beatmaps into a .cscd share file\n  \
          cascade import <file.cscd> [--no-fetch]\n                                  \
