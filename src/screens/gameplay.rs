@@ -560,7 +560,9 @@ impl GameplayScreen {
             self.handle_key_press(lane);
         }
         for lane in 0..5 {
-            let Some(idx) = self.held_notes[lane] else { continue };
+            let Some(idx) = self.held_notes[lane] else {
+                continue;
+            };
             // a held key, as far as the hold emulation can tell
             self.hold_last_seen_ms[lane] = now;
             let note = &self.beatmap.notes[idx];

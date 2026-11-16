@@ -60,7 +60,11 @@ fn main() -> Result<()> {
     // Session log: RUST_LOG=debug cascade 2>cascade.log
     env_logger::init();
     let args: Vec<String> = std::env::args().collect();
-    log::info!("cascade {} args {:?}", env!("CARGO_PKG_VERSION"), &args[1..]);
+    log::info!(
+        "cascade {} args {:?}",
+        env!("CARGO_PKG_VERSION"),
+        &args[1..]
+    );
     bundled::seed();
 
     if args.len() >= 2 {
@@ -379,8 +383,7 @@ impl Session {
         }
         if gp.autoplay {
             // the game played itself: show the results, keep nothing
-            let breakdown =
-                play_history::breakdown(&gp.replay_events, gp.beatmap.song.duration_ms);
+            let breakdown = play_history::breakdown(&gp.replay_events, gp.beatmap.song.duration_ms);
             let diff_name = gp.beatmap.difficulty.to_string();
             self.results = Some(ResultsScreen::new(
                 gp.state,
@@ -538,7 +541,10 @@ impl Session {
         log::info!(
             "play {} ({}) {} mods {:?} notes {} practice {} autoplay {}",
             self.last_song_title,
-            self.last_beatmap_path.as_deref().unwrap_or(Path::new("")).display(),
+            self.last_beatmap_path
+                .as_deref()
+                .unwrap_or(Path::new(""))
+                .display(),
             gp.beatmap.difficulty,
             gp.mods.storage_key(),
             gp.beatmap.notes.len(),
@@ -615,7 +621,7 @@ fn run(
         }
         process_input(&mut session, terminal)?;
         update(&mut session, terminal);
-        if frame % draw_every == 0 {
+        if frame.is_multiple_of(draw_every) {
             draw(&mut session, terminal)?;
         }
 
