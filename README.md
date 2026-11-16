@@ -43,6 +43,21 @@
 
 ---
 
+## In the Asciiverse
+
+This is Cascade as the [Asciiverse](https://asciiverse.sh) ships it, and it
+comes with music: **nine songs from Bellbeat**, the Asciiverse's own rhythm
+game, are in your song list the first time you start, from the bright bell
+of *Hello, World* to *SIGTERM* at 172 beats a minute. Play them, then press
+<kbd>i</kbd> and feed it your own. Your library, scores and settings live in
+`~/.local/state/cascade` (or `$XDG_STATE_HOME/cascade`; Application Support
+on macOS, `%LOCALAPPDATA%` on Windows), a library from `~/.cascade` comes
+along the first time, and this build never goes online.
+`RUST_LOG=cascade=debug cascade 2>cascade.log` keeps a log of a session.
+Everything we changed is in [PATCHES.md](PATCHES.md).
+
+---
+
 Cascade is a five-lane rhythm game that runs entirely in your terminal. Drop
 in any `.mp3` / `.flac` / `.ogg` / `.wav` and it will analyse the audio,
 detect onsets and beat, and generate beatmaps for four difficulties — all

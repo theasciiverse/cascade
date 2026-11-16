@@ -13,6 +13,8 @@ on:
   push:
     tags:
       - "v*"
+      # Asciiverse tags are built by asciiverse-release.yml
+      - "!*-av.*"
 
 env:
   CARGO_TERM_COLOR: always
