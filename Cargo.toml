@@ -33,9 +33,16 @@ serde_json = "1"
 toml = "0.8"
 anyhow = "1"
 dirs = "6"
-ureq = { version = "2", default-features = false, features = ["tls"] }
+ureq = { version = "2", default-features = false, features = ["tls"], optional = true }
+log = "0.4"
+env_logger = { version = "0.11", default-features = false, features = ["auto-color", "humantime"] }
 sha2 = "0.10"
 tempfile = "3"
+
+[features]
+# Downloading songs from a URL (`cascade add <URL>`, `cascade import` with
+# a source URL). Off in the Asciiverse build, which never goes online.
+net = ["dep:ureq"]
 
 [dev-dependencies]
 tempfile = "3"

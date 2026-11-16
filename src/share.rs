@@ -3,9 +3,7 @@
 use anyhow::{Context, Result, anyhow};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
-use std::io::{Read, Write};
 use std::path::Path;
-use std::time::Duration;
 
 use crate::audio::import::{self, MetadataFields};
 use crate::beatmap::loader;
@@ -214,7 +212,7 @@ pub fn install_package(
     )?;
 
     let audio_status = match (&pkg.song.source_url, fetch_audio) {
-        (Some(url), true) => {
+        (Some(url), true) if cfg!(feature = "net") => {
             let dest = song_dir.join(&pkg.song.audio_file);
             let bytes = download_to_file(url, &dest)?;
             match &pkg.song.audio_sha256 {
@@ -241,7 +239,8 @@ pub fn install_package(
             }
         }
         (Some(_), false) => AudioStatus::SkippedByFlag,
-        (None, _) => AudioStatus::Missing {
+        // no source URL, or a build that does not download
+        _ => AudioStatus::Missing {
             expected_filename: pkg.song.audio_file.clone(),
         },
     };
@@ -344,7 +343,19 @@ pub fn ext_from_url(url: &str) -> &'static str {
     }
 }
 
+/// Without the `net` feature this build never goes online: a download is
+/// an error that says where to get the file.
+#[cfg(not(feature = "net"))]
+pub fn download_to_file(url: &str, _dest: &Path) -> Result<u64> {
+    Err(anyhow!(
+        "this build of Cascade does not download; fetch {url} yourself and add the file"
+    ))
+}
+
+#[cfg(feature = "net")]
 pub fn download_to_file(url: &str, dest: &Path) -> Result<u64> {
+    use std::io::{Read, Write};
+    use std::time::Duration;
     const MAX_BYTES: u64 = 50 * 1024 * 1024;
     let agent = ureq::AgentBuilder::new()
         .timeout_connect(Duration::from_secs(30))
