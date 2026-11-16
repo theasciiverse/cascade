@@ -7,6 +7,7 @@ pub mod achievements;
 pub mod app;
 pub mod audio;
 pub mod beatmap;
+pub mod bundled;
 pub mod cli;
 pub mod config;
 pub mod game;

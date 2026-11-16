@@ -1,0 +1,609 @@
+{
+  "version": 2,
+  "song": {
+    "title": "Segfault March",
+    "artist": "Bellbeat",
+    "audio_file": "audio.ogg",
+    "bpm": 120.00511395715,
+    "beat_offset_ms": 506.21307246755424,
+    "duration_ms": 71286
+  },
+  "difficulty": "easy",
+  "notes": [
+    {
+      "time_ms": 256,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 885,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 1506,
+      "lane": 0,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 2256,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 2893,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 3506,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 4256,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 4890,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 5506,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 6256,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 6756,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 7506,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 8256,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 9006,
+      "lane": 0,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 9506,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 10006,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 10506,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 11006,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 11756,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 12506,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 13180,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 13756,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 14506,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 15256,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 16006,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 16756,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 17505,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 18005,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 18505,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 19005,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 19755,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 20505,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 21005,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 21505,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 22005,
+      "lane": 0,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 22505,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 23005,
+      "lane": 0,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 23755,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 24255,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 24755,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 25255,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 25755,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 26255,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 26755,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 27255,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 27755,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 28255,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 28755,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 29255,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 29886,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 30505,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 31005,
+      "lane": 0,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 31505,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 32005,
+      "lane": 0,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 32505,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 33005,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 33505,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 34005,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 34505,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 35005,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 35505,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 36255,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 36887,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 37505,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 38255,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 38755,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 39505,
+      "lane": 0,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 40255,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 41004,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 41504,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 42254,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 42754,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 43504,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 44254,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 44887,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 45504,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 46254,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 46754,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 47504,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 48254,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 49004,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 49504,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 50254,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 50754,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 51504,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 52254,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 52754,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 53254,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 53754,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 54254,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 54754,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 55254,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 55893,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 56504,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 57004,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 57504,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 58004,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 58504,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 59004,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 59504,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 60004,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 60504,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 61004,
+      "lane": 0,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 61504,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 62004,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 62504,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 63004,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 63504,
+      "lane": 4,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 64004,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 64503,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 65003,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 65503,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 66003,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 66503,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 67003,
+      "lane": 1,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 67503,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 68253,
+      "lane": 3,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 68884,
+      "lane": 2,
+      "duration_ms": 0
+    },
+    {
+      "time_ms": 69503,
+      "lane": 0,
+      "duration_ms": 0
+    }
+  ]
+}
